@@ -7,6 +7,8 @@
 #define ledVerdePeaton 6
 #define ledRojoPeaton 7
 
+unsigned long tiempoAnterior = 0;
+
 void setup() {
 
   pinMode(ledAmarilloVehiculo, OUTPUT);
@@ -21,15 +23,20 @@ void setup() {
 
 void loop() {
 
+  unsigned long tiempoActual = millis();
+
   if (digitalRead(boton) == HIGH) {
 
-    delay(4000);
+    if (tiempoActual - tiempoAnterior >= 4000) {
 
-    PrenderApagarLedVerdeVehiculo(true);
+      tiempoAnterior = tiempoActual;
 
-    prenderLedAmarilloVehiculo();
+      PrenderApagarLedVerdeVehiculo(true);
 
-    PrenderApagarLedRojoVehiculo(true);
+      prenderLedAmarilloVehiculo();
+
+      PrenderApagarLedRojoVehiculo(true);
+    }
 
   } else {
 
@@ -43,7 +50,7 @@ void loop() {
 
 void PrenderApagarLedsPeaton(bool senhal) {
 
-  if (senhal == true) {
+  if (senhal) {
 
     delay(1000);
     digitalWrite(ledRojoPeaton, LOW);
@@ -58,7 +65,7 @@ void PrenderApagarLedsPeaton(bool senhal) {
 
 void PrenderApagarLedVerdeVehiculo(bool senhal) {
 
-  if (senhal == true) {
+  if (senhal) {
 
     digitalWrite(ledVerdeVehiculo, LOW);
 
@@ -77,7 +84,7 @@ void prenderLedAmarilloVehiculo() {
 
 void PrenderApagarLedRojoVehiculo(bool senhal) {
 
-  if (senhal == true) {
+  if (senhal) {
 
     digitalWrite(ledRojoVehiculo, HIGH);
     PrenderApagarLedsPeaton(true);
